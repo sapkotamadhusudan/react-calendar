@@ -8,7 +8,8 @@ import {
   formatLongDate as defaultFormatLongDate,
 } from '../shared/dateFormatter.js';
 
-import type { CalendarType } from '../shared/types.js';
+import type { AvailableValue, CalendarType } from '../shared/types.js';
+import { isDateIncludedInList } from '../shared/utils.js';
 
 const className = 'react-calendar__month-view__days__day';
 
@@ -33,6 +34,8 @@ type DayProps = {
    * @example (locale, date) => formatDate(date, 'dd MMM YYYY')
    */
   formatLongDate?: typeof defaultFormatLongDate;
+
+  availableDates?: AvailableValue;
 } & Omit<
   React.ComponentProps<typeof Tile>,
   'children' | 'formatAbbr' | 'maxDateTransform' | 'minDateTransform' | 'view'
@@ -46,12 +49,16 @@ export default function Day({
   formatLongDate = defaultFormatLongDate,
   ...otherProps
 }: DayProps) {
-  const { date, locale } = otherProps;
+  const { date, locale, availableDates = [] } = otherProps;
 
   const classesProps: string[] = [];
 
   if (classes) {
     classesProps.push(...classes);
+  }
+
+  if (isDateIncludedInList(availableDates, date)) {
+    classesProps.push(`${className}--weekend`);
   }
 
   if (className) {

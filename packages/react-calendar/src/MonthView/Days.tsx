@@ -49,6 +49,7 @@ export default function Days(props: DaysProps) {
     showNeighboringMonth,
     value,
     valueType,
+    availableDates,
     ...otherProps
   } = props;
 
@@ -112,12 +113,14 @@ export default function Days(props: DaysProps) {
           calendarType={calendarType}
           currentMonthIndex={monthIndex}
           date={date}
+          availableDates={availableDates}
         />
       )}
       offset={offset}
       start={start}
       value={value}
       valueType={valueType}
+      availableDates={availableDates}
     />
   );
 }

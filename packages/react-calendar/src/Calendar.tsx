@@ -1,6 +1,6 @@
 'use client';
 
-import { forwardRef, useCallback, useImperativeHandle, useState } from 'react';
+import { forwardRef, useCallback, useImperativeHandle, useState, useMemo } from 'react';
 import clsx from 'clsx';
 
 import Navigation from './Calendar/Navigation.js';
@@ -28,6 +28,7 @@ import type {
   TileDisabledFunc,
   Value,
   View,
+  LooseAvailableArrayValue,
 } from './shared/types.js';
 
 import type {
@@ -419,6 +420,13 @@ export type CalendarProps = {
    * @example 'year'
    */
   view?: View;
+
+  /**
+   * Available dates for exam booking
+   *
+   * @example new Date()
+   */
+  availableDates?: LooseAvailableArrayValue;
 };
 
 function toDate(value: Date | string): Date {
@@ -560,6 +568,7 @@ function getInitialActiveStartDate({
   minDetail,
   value,
   view,
+  availableDates,
 }: {
   activeStartDate?: Date;
   defaultActiveStartDate?: Date;
@@ -571,6 +580,7 @@ function getInitialActiveStartDate({
   minDetail: Detail;
   value?: LooseValue;
   view?: View;
+  availableDates?: LooseAvailableArrayValue;
 }) {
   const rangeType = getView(view, minDetail, maxDetail);
   const valueFrom = activeStartDate || defaultActiveStartDate;
@@ -655,6 +665,7 @@ const Calendar = forwardRef(function Calendar(props: CalendarProps, ref) {
     tileDisabled,
     value: valueProps,
     view: viewProps,
+    availableDates,
   } = props;
 
   const [activeStartDateState, setActiveStartDateState] = useState<Date | null | undefined>(
@@ -684,7 +695,18 @@ const Calendar = forwardRef(function Calendar(props: CalendarProps, ref) {
       minDetail,
       value: valueProps,
       view: viewProps,
+      availableDates,
     });
+
+  const availableState = useMemo(
+    () =>
+      Array.isArray(availableDates)
+        ? (availableDates.map((el) => (el !== null ? toDate(el) : null)) as Date[] | null)
+        : availableDates !== null && availableDates !== undefined
+          ? toDate(availableDates)
+          : null,
+    [availableDates],
+  );
 
   const value: Value = (() => {
     const rawValue = (() => {
@@ -1029,6 +1051,7 @@ const Calendar = forwardRef(function Calendar(props: CalendarProps, ref) {
       case 'century': {
         return (
           <CenturyView
+            availableDates={availableState}
             formatYear={formatYear}
             showNeighboringCentury={showNeighboringCentury}
             {...commonProps}
@@ -1038,6 +1061,7 @@ const Calendar = forwardRef(function Calendar(props: CalendarProps, ref) {
       case 'decade': {
         return (
           <DecadeView
+            availableDates={availableState}
             formatYear={formatYear}
             showNeighboringDecade={showNeighboringDecade}
             {...commonProps}
@@ -1046,12 +1070,18 @@ const Calendar = forwardRef(function Calendar(props: CalendarProps, ref) {
       }
       case 'year': {
         return (
-          <YearView formatMonth={formatMonth} formatMonthYear={formatMonthYear} {...commonProps} />
+          <YearView
+            formatMonth={formatMonth}
+            formatMonthYear={formatMonthYear}
+            availableDates={availableState}
+            {...commonProps}
+          />
         );
       }
       case 'month': {
         return (
           <MonthView
+            availableDates={availableState}
             calendarType={calendarType}
             formatDay={formatDay}
             formatLongDate={formatLongDate}

@@ -26,7 +26,15 @@ type YearsProps = {
   Omit<React.ComponentProps<typeof Year>, 'classes' | 'currentDecade' | 'date'>;
 
 export default function Years(props: YearsProps) {
-  const { activeStartDate, hover, showNeighboringDecade, value, valueType, ...otherProps } = props;
+  const {
+    activeStartDate,
+    hover,
+    showNeighboringDecade,
+    value,
+    valueType,
+    availableDates,
+    ...otherProps
+  } = props;
   const start = getBeginOfDecadeYear(activeStartDate);
   const end = start + (showNeighboringDecade ? 11 : 9);
 
@@ -50,6 +58,7 @@ export default function Years(props: YearsProps) {
       start={start}
       value={value}
       valueType={valueType}
+      availableDates={availableDates}
     />
   );
 }

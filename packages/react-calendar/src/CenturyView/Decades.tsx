@@ -4,6 +4,7 @@ import TileGroup from '../TileGroup.js';
 import Decade from './Decade.js';
 
 import { getBeginOfCenturyYear } from '../shared/dates.js';
+import type { AvailableValue } from '../shared/types.js';
 
 type DecadesProps = {
   /**
@@ -19,6 +20,7 @@ type DecadesProps = {
    * @example true
    */
   showNeighboringCentury?: boolean;
+  availableDates?: AvailableValue;
 } & Omit<
   React.ComponentProps<typeof TileGroup>,
   'dateTransform' | 'dateType' | 'end' | 'renderTile' | 'start'
@@ -26,7 +28,15 @@ type DecadesProps = {
   Omit<React.ComponentProps<typeof Decade>, 'classes' | 'currentCentury' | 'date'>;
 
 export default function Decades(props: DecadesProps) {
-  const { activeStartDate, hover, showNeighboringCentury, value, valueType, ...otherProps } = props;
+  const {
+    activeStartDate,
+    hover,
+    showNeighboringCentury,
+    value,
+    valueType,
+    availableDates,
+    ...otherProps
+  } = props;
   const start = getBeginOfCenturyYear(activeStartDate);
   const end = start + (showNeighboringCentury ? 119 : 99);
 
@@ -51,6 +61,7 @@ export default function Decades(props: DecadesProps) {
       step={10}
       value={value}
       valueType={valueType}
+      availableDates={availableDates}
     />
   );
 }

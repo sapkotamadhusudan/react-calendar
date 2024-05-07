@@ -22,6 +22,10 @@ export type Value = ValuePiece | Range<ValuePiece>;
 
 export type View = 'century' | 'decade' | 'year' | 'month';
 
+export type LooseAvailableArrayValue = LooseValuePiece | Array<LooseValuePiece>;
+
+export type AvailableValue = ValuePiece | Array<ValuePiece>;
+
 export type NavigationLabelArgs = {
   date: Date;
   label: string;

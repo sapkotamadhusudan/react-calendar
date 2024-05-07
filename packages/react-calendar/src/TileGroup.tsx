@@ -2,7 +2,7 @@ import Flex from './Flex.js';
 
 import { getTileClasses } from './shared/utils.js';
 
-import type { RangeType, Value } from './shared/types.js';
+import type { RangeType, Value, AvailableValue } from './shared/types.js';
 
 type TileGroupProps = {
   className?: string;
@@ -17,6 +17,7 @@ type TileGroupProps = {
   step?: number;
   value?: Value;
   valueType: RangeType;
+  availableDates: AvailableValue;
 };
 
 export default function TileGroup({
@@ -32,6 +33,7 @@ export default function TileGroup({
   step = 1,
   value,
   valueType,
+  availableDates,
 }: TileGroupProps) {
   const tiles = [];
   for (let point = start; point <= end; point += step) {
@@ -45,6 +47,7 @@ export default function TileGroup({
           hover,
           value,
           valueType,
+          availableDates,
         }),
         date,
       }),

@@ -1,6 +1,6 @@
 {
   "name": "react-calendar",
-  "version": "5.0.0",
+  "version": "5.0.1",
   "description": "Ultimate calendar for your React app.",
   "type": "module",
   "sideEffects": [
@@ -81,7 +81,7 @@
   },
   "publishConfig": {
     "access": "public",
-    "provenance": true
+    "provenance": false
   },
   "files": [
     "dist",

@@ -1,6 +1,7 @@
+import { formatDate } from './dateFormatter.js';
 import { getRange } from './dates.js';
 
-import type { Range, RangeType, Value } from './types.js';
+import type { AvailableValue, Range, RangeType, Value } from './types.js';
 
 /**
  * Returns a value no smaller than min and no larger than max.
@@ -79,6 +80,7 @@ export function getTileClasses(args: {
   hover?: Date | null;
   value?: Value;
   valueType?: RangeType;
+  availableDates?: AvailableValue;
 }): string[] {
   if (!args) {
     throw new Error('args is required');
@@ -151,4 +153,20 @@ export function getTileClasses(args: {
   }
 
   return classes;
+}
+
+export function isDateIncludedInList(dateList: AvailableValue, date: Date): boolean {
+  const formattedDate = formatDate('en-US', date);
+  if (Array.isArray(dateList)) {
+    return (
+      dateList
+        .filter(Boolean)
+        .map((d) => formatDate('en-US', d!))
+        .indexOf(formattedDate) !== -1
+    );
+  } else if (dateList) {
+    return formattedDate === formatDate('en-US', dateList);
+  }
+
+  return false;
 }
